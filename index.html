@@ -8,7 +8,7 @@
     </head>
     <body>
         <div id="calcHolder">
-            <div id="userOutput">265161</div>
+            <div id="userOutput">0</div>
             <div id="userInput">
                 <div class="buttons" id="clear">C</div>
                 <div class="buttons" ></div>
@@ -32,10 +32,53 @@
 
                 <div class="buttons" id="plusMinus"> </div>
                 <div class="buttons number" id="0">0</div>
-                <div class="buttons" id="dot">.</div>
+                <div class="buttons number" id="dot">.</div>
                 <div class="buttons" id="operate">=</div> 
                 
             </div>
         </div>
+
+        <script>
+
+            function add(a, b) {
+                return a+b;
+            }
+
+            function subtract(a, b) {
+                return a - b;
+            }
+
+            function multiply(a, b) {
+                return a * b;
+            }
+
+            function divide(a, b) {
+                return a / b;
+            }
+
+            const userOutput = document.querySelector('#userOutput');
+            const number = [...document.querySelectorAll('div .number')];
+
+            //const operation
+            // console.log(number);
+            number.forEach(itm => {
+                itm.addEventListener('click', numberClicked )
+            });
+
+            function numberClicked(){
+                // console.log(this);
+                let tempNumber = this.textContent;
+                if(userOutput.textContent == '0') {
+                    userOutput.textContent = (tempNumber == '.') ? '0.' : tempNumber; 
+                } else if(userOutput.textContent.length <= 15 ) {
+                    if(this.textContent == '.' && userOutput.textContent.includes('.')) {
+                        tempNumber = '';
+                    }
+                    userOutput.textContent += tempNumber;
+                    
+                }
+               
+            }
+        </script>
     </body>
 </html>
