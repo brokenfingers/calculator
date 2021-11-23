@@ -11,6 +11,14 @@ body {
     flex-direction: column;
 
 }
+
+#miniOutput{
+    width: 95%;
+    height: 100px;
+    background-color: antiquewhite;
+    margin: 10px auto;
+}
+
 #userOutput{
     /* background-color: white; */
     margin: 10px auto;

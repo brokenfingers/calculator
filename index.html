@@ -8,32 +8,33 @@
     </head>
     <body>
         <div id="calcHolder">
+            <div id="miniOutput"></div>
             <div id="userOutput">0</div>
             <div id="userInput">
-                <div class="buttons" id="clear">C</div>
+                <div class="buttons funct" id="clear">C</div>
                 <div class="buttons" ></div>
                 <div class="buttons" ></div>
-                <div class="buttons" id="divide">/</div>
+                <div class="buttons funct" id="divide">/</div>
 
                 <div class="buttons number" id="7">7</div>  
                 <div class="buttons number" id="8">8</div>
                 <div class="buttons number" id="9">9</div>
-                <div class="buttons" id="3">X</div>
+                <div class="buttons funct" id="3">X</div>
 
                 <div class="buttons number" id="4">4</div>
                 <div class="buttons number" id="5">5</div>
                 <div class="buttons number" id="6">6</div>
-                <div class="buttons" id="subtract">-</div>
+                <div class="buttons funct" id="subtract">-</div>
 
                 <div class="buttons number" id="1">1</div>
                 <div class="buttons number" id="2">2</div>
                 <div class="buttons number" id="3">3</div>
-                <div class="buttons" id="add">+</div>
+                <div class="buttons funct" id="add">+</div>
 
                 <div class="buttons" id="plusMinus"> </div>
                 <div class="buttons number" id="0">0</div>
                 <div class="buttons number" id="dot">.</div>
-                <div class="buttons" id="operate">=</div> 
+                <div class="buttons funct" id="operate">=</div> 
                 
             </div>
         </div>
@@ -56,25 +57,112 @@
                 return a / b;
             }
 
+            const miniOutput = document.querySelector('#miniOutput');
             const userOutput = document.querySelector('#userOutput');
-            const number = [...document.querySelectorAll('div .number')];
+            const numbers = [...document.querySelectorAll('div .number')];
+            const operators = [...document.querySelectorAll('div .funct')];
 
-            //const operation
+            let opList = [];
             // console.log(number);
-            number.forEach(itm => {
+            numbers.forEach(itm => {
                 itm.addEventListener('click', numberClicked )
             });
 
+
+            operators.forEach(itm => {
+                itm.addEventListener('click', operatorClicked )
+            })
+
+            function operatorClicked() {
+                
+                if(this.textContent == 'C') {
+                    clearAll();
+                    return;
+                }
+
+                if(this.textContent == '=') {
+                    operate();
+                    return;
+                }
+
+               if(opList[opList.length-1] == this.textContent && opList[opList.length-2] == userOutput.textContent) {
+                return;
+               }
+                opList.push(userOutput.textContent);
+                opList.push(this.textContent);
+                miniOutputDisplay();
+                
+                
+            }
+
+            function operate() {
+                
+                let result = 0;
+                if(opList.length < 2) {
+                    console.log("ffff");
+                    return;
+                }
+                opList.forEach(itm => {
+                    if(result == 0) {
+                        result = itm;
+                    } else {
+                        switch(itm) {
+                            case '/':
+                            console.log('divide');
+                            break;
+                            case '+':
+                            console.log('add');
+                            break;
+                            case '-':
+                            console.log('subtr');
+                            break;
+                            case 'X':
+                            console.log('multipl');
+                            break;
+                            
+                        }
+                    
+
+
+
+                    }
+                })
+            }
+
+
+            function clearAll()
+            {
+                userOutput.textContent = 0;
+                miniOutput.textContent = "";
+                opList = [];
+            }
+
+            function miniOutputDisplay() {
+                miniOutput.textContent = '';
+                opList.forEach(itm => {
+                    miniOutput.textContent +=  itm;
+                })
+            }
+
             function numberClicked(){
-                // console.log(this);
+               
                 let tempNumber = this.textContent;
+                
+                if(opList.length >1 ) {
+                    if(opList[opList.length-2] == userOutput.textContent) {
+                        userOutput.textContent = 0;
+                    }
+                }
                 if(userOutput.textContent == '0') {
-                    userOutput.textContent = (tempNumber == '.') ? '0.' : tempNumber; 
+                    let a = (tempNumber == '.') ? '0.' : tempNumber; 
+                    userOutput.textContent = a;
+                    miniOutput.textContent += a;
                 } else if(userOutput.textContent.length <= 15 ) {
                     if(this.textContent == '.' && userOutput.textContent.includes('.')) {
                         tempNumber = '';
                     }
                     userOutput.textContent += tempNumber;
+                    miniOutput.textContent += tempNumber;
                     
                 }
                
