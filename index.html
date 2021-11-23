@@ -41,21 +41,11 @@
 
         <script>
 
-            function add(a, b) {
-                return a+b;
-            }
-
-            function subtract(a, b) {
-                return a - b;
-            }
-
-            function multiply(a, b) {
-                return a * b;
-            }
-
-            function divide(a, b) {
-                return a / b;
-            }
+            const add = (a, b) => a + b;
+            const subtract = (a, b) => a - b;   
+            const multiply = (a, b) => a * b;
+            const divide = (a, b) => a / b;
+            
 
             const miniOutput = document.querySelector('#miniOutput');
             const userOutput = document.querySelector('#userOutput');
@@ -63,7 +53,7 @@
             const operators = [...document.querySelectorAll('div .funct')];
 
             let opList = [];
-            // console.log(number);
+          
             numbers.forEach(itm => {
                 itm.addEventListener('click', numberClicked )
             });
@@ -81,7 +71,8 @@
                 }
 
                 if(this.textContent == '=') {
-                    operate();
+                    opList.push(userOutput.textContent);
+                    operate(opList[0], opList[2], opList[1]);
                     return;
                 }
 
@@ -95,38 +86,27 @@
                 
             }
 
-            function operate() {
-                
-                let result = 0;
-                if(opList.length < 2) {
-                    console.log("ffff");
-                    return;
-                }
-                opList.forEach(itm => {
-                    if(result == 0) {
-                        result = itm;
-                    } else {
-                        switch(itm) {
+            function operate(a, b, c) {
+              
+                a = parseFloat(a);
+                b = parseFloat(b);
+            
+            clearAll();
+                        switch(c) {
                             case '/':
-                            console.log('divide');
+                            userOutput.textContent = divide(a, b);
                             break;
                             case '+':
-                            console.log('add');
+                            userOutput.textContent = add(a, b);
                             break;
                             case '-':
-                            console.log('subtr');
+                            userOutput.textContent = subtract(a, b);
                             break;
                             case 'X':
-                            console.log('multipl');
+                            userOutput.textContent = multiply(a, b);
                             break;
                             
                         }
-                    
-
-
-
-                    }
-                })
             }
 
 
@@ -153,6 +133,11 @@
                         userOutput.textContent = 0;
                     }
                 }
+
+                if(opList.length == 0) {
+                    userOutput.textContent = 0;
+                }
+
                 if(userOutput.textContent == '0') {
                     let a = (tempNumber == '.') ? '0.' : tempNumber; 
                     userOutput.textContent = a;

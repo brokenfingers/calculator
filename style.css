@@ -15,8 +15,10 @@ body {
 #miniOutput{
     width: 95%;
     height: 100px;
-    background-color: antiquewhite;
+    /* background-color: antiquewhite; */
     margin: 10px auto;
+    display: flex;
+    justify-content: end;
 }
 
 #userOutput{
