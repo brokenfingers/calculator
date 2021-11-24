@@ -76,10 +76,10 @@
                 }
               
                 if(this.textContent == 'CE') {
-                    if(miniOutput.textContent.length>userOutput.textContent.length) {
+                    if(miniOutput.textContent.length >= userOutput.textContent.length) {
                         miniOutput.textContent = miniOutput.textContent.substring(0, miniOutput.textContent.length-userOutput.textContent.length);
                     }
-                    userOutput.textContent = '';
+                    userOutput.textContent = '0';
                     return;
                 }
 
