@@ -21,8 +21,8 @@ window.addEventListener("load", onPageLoad);
 
 function onPageLoad() {
     userOutput = document.querySelector('#userOutput');
-    userOutput.value = '';
-    userOutput.focus();
+    userOutput.textContent = '';
+    
     numbers = [...document.querySelectorAll('div .number')];
     operators = [...document.querySelectorAll('div .funct')];
 
@@ -30,7 +30,7 @@ function onPageLoad() {
 
 
     numbers.forEach(itm => {
-        itm.addEventListener('click', numberClicked );
+        itm.addEventListener('click', numberClicked);
     });
 
 
@@ -41,58 +41,91 @@ function onPageLoad() {
 }
 
 function kbdPressed(e) {
-    console.log(e['key']);
+    
     if( opWasReset == true) {
-        userOutput.value = '';
+        userOutput.textContent = '';
         opWasReset = false;
+    }
+    if(Number.isInteger(Number.parseInt(e['key']))) {
+        passNumber(e['key']);
+        return;
+    }
+    switch(e['key']) {
+        case '/':
+            pushToArray(e['key']);
+            break;
+        case '*':
+            pushToArray('X');
+            break;
+        case 'Backspace':
+            backspacePressed();
+            break;
+        case '-':
+            pushToArray(e['key']);
+            break;
+        case '+':
+            pushToArray(e['key']);
+            break;
+        case 'Enter':
+            if(opList.length<2) {
+                return;
+            }
+            equalPressed();
+            break;
     }
 }
 
+function backspacePressed() {
+    let tempOutputArray = Array.from(userOutput.textContent);
+    tempOutputArray.pop();
+    userOutput.textContent = tempOutputArray.join('');
+}
+
+function equalPressed() {
+    opList.push(userOutput.textContent);
+    operate(opList[0], opList[2], opList[1]);
+}
+
 function operatorClicked() {
-    userOutput.focus();
-    if(this.textContent == '←') {
-        let tempOutputArray = Array.from(userOutput.value);
-        tempOutputArray.pop();
-        userOutput.value = tempOutputArray.join('');
-        return;
-    }
-
-
-    if(this.textContent == 'C') {
-        clearAll();
-        return;
-    }
-    
-    if(this.textContent == 'CE') {
-       userOutput.value = '0';
-        return;
-    }
-
-    
-
-    if(this.textContent == '=') {
-        if(opList.length<2) {
+    switch(this.textContent) {
+        case '←':
+            backspacePressed();
             return;
-        }
-        opList.push(userOutput.value);
-        operate(opList[0], opList[2], opList[1]);
-        return;
+            break;
+        case 'C':
+            clearAll();
+            return;
+            break;
+        case 'CE':
+            userOutput.textContent = '0';
+            return;
+            break;
+        case '=':
+            if(opList.length<2) {
+                return;
+            }
+            equalPressed();
+            return;
+            break;
     }
+    pushToArray(this.textContent)
+}
 
+function pushToArray(oprtr) {
     if(opList.length == 2) {
-        opList.push(userOutput.value);
-        currentResult = userOutput.value;
+        opList.push(userOutput.textContent);
+        currentResult = userOutput.textContent;
         operate(opList[0], opList[2], opList[1]);
 
         
-        opList.push(userOutput.value);
-        opList.push(this.textContent);
+        opList.push(userOutput.textContent);
+        opList.push(oprtr);
         opWasReset = true;
         return;
     }
 
-    opList.push(userOutput.value);
-    opList.push(this.textContent);
+    opList.push(userOutput.textContent);
+    opList.push(oprtr);
     opWasReset = true;
 }
 
@@ -103,17 +136,17 @@ function operate(a, b, c) {
     
         switch(c) {
             case '/':
-                userOutput.value = (a==0 || b == 0) ? "Oh no! Error" : divide(a, b);
+                userOutput.textContent = (a==0 || b == 0) ? "Oh no! Error" : divide(a, b);
                 break;
             case '+':
-                userOutput.value = add(a, b);
+                userOutput.textContent = add(a, b);
                 opWasReset = true;
                 break;
             case '-':
-                userOutput.value = subtract(a, b);
+                userOutput.textContent = subtract(a, b);
                 break;
             case 'X':
-                userOutput.value = multiply(a, b);
+                userOutput.textContent = multiply(a, b);
                 break;
                 
         }               
@@ -123,23 +156,28 @@ function operate(a, b, c) {
 function clearAll()
 {
     opWasReset = true;
-    userOutput.value = 0;
+    userOutput.textContent = 0;
     opList = [];
 }
 
 
 function numberClicked(){
-    userOutput.focus();
+    
+    passNumber(this.textContent);
+}
+
+function passNumber(nbrm) {
+     
     if( opWasReset == true) {
-        userOutput.value = 0;
+        userOutput.textContent = 0;
         opWasReset = false;
     }
-    if(userOutput.value == '0') {
-        userOutput.value = (this.textContent == '.') ? '0.' : this.textContent;
+    if(userOutput.textContent == '0') {
+        userOutput.textContent = (nbrm == '.') ? '0.' : nbrm;
         return;
     } 
-    if(this.textContent == '.' && userOutput.value.includes('.')) {
+    if(nbrm == '.' && userOutput.textContent.includes('.')) {
         return;
     }
-    userOutput.value += this.textContent;
+    userOutput.textContent += nbrm;
 }
