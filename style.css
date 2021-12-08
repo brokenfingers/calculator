@@ -33,6 +33,8 @@ body {
     justify-content: end;
     font-size:3em;
     align-items:flex-end;
+    background-color: transparent;
+    text-align: right;
     
 }
 

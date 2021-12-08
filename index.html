@@ -9,7 +9,7 @@
     <body>
         <div id="calcHolder">
             <div id="miniOutput"></div>
-            <div id="userOutput">0</div>
+            <input type="input" id="userOutput">
             <div id="userInput">
                 <div class="buttons funct" id="clear">C</div>
                 <div class="buttons funct" >CE</div>
@@ -76,10 +76,10 @@
                 }
               
                 if(this.textContent == 'CE') {
-                    if(miniOutput.textContent.length >= userOutput.textContent.length) {
-                        miniOutput.textContent = miniOutput.textContent.substring(0, miniOutput.textContent.length-userOutput.textContent.length);
+                    if(miniOutput.textContent.length >= userOutput.value.length) {
+                        miniOutput.textContent = miniOutput.textContent.substring(0, miniOutput.textContent.length-userOutput.value.length);
                     }
-                    userOutput.textContent = '0';
+                    userOutput.value = '0';
                     return;
                 }
 
@@ -89,24 +89,24 @@
                     if(opList.length<2) {
                         return;
                     }
-                    opList.push(userOutput.textContent);
+                    opList.push(userOutput.value);
                     operate(opList[0], opList[2], opList[1]);
                     miniOutput.textContent = '';
                     return;
                 }
 
-            //    if(opList[opList.length-1] == this.textContent && opList[opList.length-2] == userOutput.textContent) {
+            //    if(opList[opList.length-1] == this.textContent && opList[opList.length-2] == userOutput.value) {
             //     return;
             //    }
                
                if(opList.length == 2) {
-                     opList.push(userOutput.textContent);
-                    currentResult = userOutput.textContent;
+                     opList.push(userOutput.value);
+                    currentResult = userOutput.value;
 
                     operate(opList[0], opList[2], opList[1]);
 
                     
-                    opList.push(userOutput.textContent);
+                    opList.push(userOutput.value);
                     opList.push(this.textContent);
                     miniOutput.textContent += this.textContent;
                     // console.table(opList);
@@ -114,7 +114,7 @@
                     return;
                }
 
-                opList.push(userOutput.textContent);
+                opList.push(userOutput.value);
                 opList.push(this.textContent);
                 miniOutputDisplay();
                 
@@ -129,16 +129,16 @@
                  switch(c) {
                     case '/':
 
-                        userOutput.textContent = (a==0 || b == 0) ? "Oh no! Error" : divide(a, b);
+                        userOutput.value = (a==0 || b == 0) ? "Oh no! Error" : divide(a, b);
                         break;
                         case '+':
-                         userOutput.textContent = add(a, b);
+                         userOutput.value = add(a, b);
                          break;
                          case '-':
-                         userOutput.textContent = subtract(a, b);
+                         userOutput.value = subtract(a, b);
                          break;
                          case 'X':
-                        userOutput.textContent = multiply(a, b);
+                        userOutput.value = multiply(a, b);
                         break;
                          
                         }               
@@ -148,7 +148,7 @@
             function clearAll()
             {
                 opWasReset = true;
-                userOutput.textContent = 0;
+                userOutput.value = 0;
                 // miniOutput.textContent = "";
                 opList = [];
             }
@@ -167,31 +167,32 @@
             function numberClicked(){
                
                 let tempNumber = this.textContent;
+                userOutput.focus();
                 
                 if(opList.length >1 ) {
-                    if(opList[opList.length-2] == userOutput.textContent) {
-                        userOutput.textContent = 0;
+                    if(opList[opList.length-2] == userOutput.value) {
+                        userOutput.value = 0;
                     }
                 }
 
                 // opList.length == 0 &&
                 if( opWasReset == true) {
-                    userOutput.textContent = 0;
+                    userOutput.value = 0;
                     opWasReset = false;
                     
                 }
 
-                if(userOutput.textContent == '0') {
+                if(userOutput.value == '0') {
                   
                     let a = (tempNumber == '.') ? '0.' : tempNumber; 
-                    userOutput.textContent = a;
+                    userOutput.value = a;
                     miniOutput.textContent += a;
                 } 
-                else if(userOutput.textContent.length <= 15 ) {
-                         if(this.textContent == '.' && userOutput.textContent.includes('.')) {
+                else if(userOutput.value.length <= 15 ) {
+                         if(this.textContent == '.' && userOutput.value.includes('.')) {
                            return;
                          }
-                        userOutput.textContent += tempNumber;
+                        userOutput.value += tempNumber;
                         miniOutput.textContent += tempNumber;
                     
                     }
