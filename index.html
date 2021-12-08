@@ -9,11 +9,11 @@
     <body>
         <div id="calcHolder">
             <div id="miniOutput"></div>
-            <div id="userOutput">0</div>
+            <div id="userOutput" ></div>
             <div id="userInput">
                 <div class="buttons funct" id="clear">C</div>
                 <div class="buttons funct" >CE</div>
-                <div class="buttons" ></div>
+                <div class="buttons funct" >&#8592;</div>
                 <div class="buttons funct" id="divide">/</div>
 
                 <div class="buttons number" id="7">7</div>  
@@ -39,164 +39,5 @@
             </div>
         </div>
 
-        <script>
-
-            const add = (a, b) => a + b;
-            const subtract = (a, b) => a - b;   
-            const multiply = (a, b) => a * b;
-            const divide = (a, b) => a / b;
-            
-
-            const miniOutput = document.querySelector('#miniOutput');
-            const userOutput = document.querySelector('#userOutput');
-            const numbers = [...document.querySelectorAll('div .number')];
-            const operators = [...document.querySelectorAll('div .funct')];
-            let opWasReset = true;
-            let currentResult = '';
-
-            let opList = [];
-          
-            numbers.forEach(itm => {
-                itm.addEventListener('click', numberClicked )
-            });
-
-
-            operators.forEach(itm => {
-                itm.addEventListener('click', operatorClicked )
-            })
-
-
-
-            function operatorClicked() {
-                
-                if(this.textContent == 'C') {
-                    clearAll();
-                    miniOutput.textContent = '';
-                    return;
-                }
-              
-                if(this.textContent == 'CE') {
-                    if(miniOutput.textContent.length >= userOutput.textContent.length) {
-                        miniOutput.textContent = miniOutput.textContent.substring(0, miniOutput.textContent.length-userOutput.textContent.length);
-                    }
-                    userOutput.textContent = '0';
-                    return;
-                }
-
-                
-
-                if(this.textContent == '=') {
-                    if(opList.length<2) {
-                        return;
-                    }
-                    opList.push(userOutput.textContent);
-                    operate(opList[0], opList[2], opList[1]);
-                    miniOutput.textContent = '';
-                    return;
-                }
-
-            //    if(opList[opList.length-1] == this.textContent && opList[opList.length-2] == userOutput.textContent) {
-            //     return;
-            //    }
-               
-               if(opList.length == 2) {
-                     opList.push(userOutput.textContent);
-                    currentResult = userOutput.textContent;
-
-                    operate(opList[0], opList[2], opList[1]);
-
-                    
-                    opList.push(userOutput.textContent);
-                    opList.push(this.textContent);
-                    miniOutput.textContent += this.textContent;
-                    // console.table(opList);
-                    opWasReset = true;
-                    return;
-               }
-
-                opList.push(userOutput.textContent);
-                opList.push(this.textContent);
-                miniOutputDisplay();
-                
-                
-            }
-
-            function operate(a, b, c) {
-                clearAll();
-                a = parseFloat(a);
-                b = parseFloat(b);
-                
-                 switch(c) {
-                    case '/':
-
-                        userOutput.textContent = (a==0 || b == 0) ? "Oh no! Error" : divide(a, b);
-                        break;
-                        case '+':
-                         userOutput.textContent = add(a, b);
-                         break;
-                         case '-':
-                         userOutput.textContent = subtract(a, b);
-                         break;
-                         case 'X':
-                        userOutput.textContent = multiply(a, b);
-                        break;
-                         
-                        }               
-            }
-
-
-            function clearAll()
-            {
-                opWasReset = true;
-                userOutput.textContent = 0;
-                // miniOutput.textContent = "";
-                opList = [];
-            }
-
-            function miniOutputDisplay() {
-                miniOutput.textContent = '';
-                opList.forEach(itm => {
-                    miniOutput.textContent +=  itm;
-                })
-            }
-
-
-
-
-
-            function numberClicked(){
-               
-                let tempNumber = this.textContent;
-                
-                if(opList.length >1 ) {
-                    if(opList[opList.length-2] == userOutput.textContent) {
-                        userOutput.textContent = 0;
-                    }
-                }
-
-                // opList.length == 0 &&
-                if( opWasReset == true) {
-                    userOutput.textContent = 0;
-                    opWasReset = false;
-                    
-                }
-
-                if(userOutput.textContent == '0') {
-                  
-                    let a = (tempNumber == '.') ? '0.' : tempNumber; 
-                    userOutput.textContent = a;
-                    miniOutput.textContent += a;
-                } 
-                else if(userOutput.textContent.length <= 15 ) {
-                         if(this.textContent == '.' && userOutput.textContent.includes('.')) {
-                           return;
-                         }
-                        userOutput.textContent += tempNumber;
-                        miniOutput.textContent += tempNumber;
-                    
-                    }
-               
-            }
-        </script>
     </body>
 </html>
